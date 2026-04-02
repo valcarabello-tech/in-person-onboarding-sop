@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grafana Labs — Event Week Platform</title>
+<title>Grafana Labs — In-Person Onboarding SOP</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ===== CSS RESET & TOKENS ===== */
@@ -470,6 +470,91 @@ body {
   transition: width 0.3s ease;
 }
 
+/* ===== AGENDA TABLE ===== */
+.agenda-day { margin-bottom: 18px; }
+.agenda-day:last-child { margin-bottom: 0; }
+.agenda-day-label {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-orange);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-medium);
+  margin-bottom: 6px;
+}
+.agenda-track-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 0 4px;
+}
+.agenda-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.agenda-table tr { border-bottom: 1px solid var(--border-weak); }
+.agenda-table tr:last-child { border-bottom: none; }
+.agenda-table td { padding: 5px 4px 5px 0; vertical-align: top; }
+.a-time {
+  white-space: nowrap;
+  color: var(--text-disabled);
+  font-family: var(--font-body);
+  font-size: 10px;
+  width: 108px;
+  min-width: 108px;
+  padding-top: 6px;
+}
+.a-topic { color: var(--text-primary); font-weight: 500; }
+.a-room {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 10px;
+  white-space: nowrap;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.a-speaker { color: var(--color-orange-light); font-size: 10px; min-width: 80px; }
+
+/* ===== ATTENDEES ===== */
+.attendee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.attendee-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+}
+.attendee-name { font-weight: 600; font-size: 12px; color: var(--text-emphasis); margin-bottom: 2px; }
+.attendee-role { font-size: 10px; color: var(--text-secondary); margin-bottom: 5px; line-height: 1.4; }
+.attendee-org {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+.attendee-org.gtm { background: rgba(41, 112, 255, 0.15); color: #6E9FFF; }
+.attendee-org.rd  { background: rgba(4, 188, 76, 0.12);  color: #04BC4C; }
+.attendee-org.ga  { background: rgba(255, 103, 29, 0.15); color: var(--color-orange-light); }
+
+/* ===== CHANNELS ROW ===== */
+.channels-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.channels-row .info-card {
+  flex: 1;
+  min-width: 0;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
   .app { padding: 8px; }
@@ -495,7 +580,7 @@ body {
   <div class="header-top">
     <div class="header-logo">G</div>
     <div>
-      <div class="header-title">Event week platform</div>
+      <div class="header-title">In-Person Onboarding SOP</div>
       <div class="header-subtitle">Host command center — Grafana Labs in-person onboarding</div>
     </div>
   </div>
@@ -511,7 +596,10 @@ body {
     <div class="info-card">
       <div class="info-label">Location</div>
       <div class="info-value">Omni King Edward, Toronto</div>
+      <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">37 King St E, Toronto, ON M5C 1E9</div>
     </div>
+  </div>
+  <div class="channels-row">
     <div class="info-card">
       <div class="info-label">Onboarding channel</div>
       <div class="info-value channel">#inpersononboarding-2026-apr-toronto</div>
@@ -593,20 +681,6 @@ body {
         <li class="checklist-item">
           <input type="checkbox" onchange="updateProgress('monday')">
           <div class="task-content">
-            <span class="task-text">Unpack inventory bins and verify contents</span>
-            <span class="task-badge badge-action">Action</span>
-            <div class="task-subitems">
-              <div class="task-subitem"><strong>Bin 1 (locked — code: 4124):</strong> 3 laptops (use "Onboarding Laptop" with stickers), Dymo LabelWriter Printer, Name Tags</div>
-              <div class="task-subitem"><strong>Bin 2:</strong> L&D Contest Prizes (do not open)</div>
-              <div class="task-subitem"><strong>Bin 3:</strong> GLO Water Bottles (do not open)</div>
-              <div class="task-subitem"><strong>Bin 4:</strong> Presenter Sweaters, Stickers, Lapel Pins, Lanyards, Tumblers</div>
-              <div class="task-subitem"><strong>Boxes:</strong> Culture Map Books (2), Banners (1 box, 3 banners), Scarves (1 big box), Tumblers (5), Journals (2.5), Misc (1)</div>
-            </div>
-          </div>
-        </li>
-        <li class="checklist-item">
-          <input type="checkbox" onchange="updateProgress('monday')">
-          <div class="task-content">
             <span class="task-text">Set up new hire swag at every seat</span>
             <span class="task-badge badge-action">Action</span>
             <div class="task-subitems">
@@ -629,6 +703,27 @@ body {
           <div class="task-content">
             <span class="task-text">Set up welcome banners (3 total)</span>
             <span class="task-badge badge-action">Action</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Presenter Dinner -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🍽️</span> Presenter dinner</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="monday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-time">6:30 – 8:30 PM</span>
+            <span class="task-text">Presenter Dinner / Brainstorming Session</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Venue: TBD · Attendance: All Presenters</div>
           </div>
         </li>
       </ul>
@@ -903,6 +998,20 @@ We have arranged dinner and an opportunity for connection for all of you! Please
     </div>
     <div class="section-body">
       <ul class="checklist" data-day="wednesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-text">Unpack inventory bins and verify contents</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-subitems">
+              <div class="task-subitem"><strong>Bin 1 (locked — code: 4124):</strong> 3 laptops (use "Onboarding Laptop" with stickers), Dymo LabelWriter Printer, Name Tags</div>
+              <div class="task-subitem"><strong>Bin 2:</strong> L&D Contest Prizes (do not open)</div>
+              <div class="task-subitem"><strong>Bin 3:</strong> GLO Water Bottles (do not open)</div>
+              <div class="task-subitem"><strong>Bin 4:</strong> Presenter Sweaters, Stickers, Lapel Pins, Lanyards, Tumblers</div>
+              <div class="task-subitem"><strong>Boxes:</strong> Culture Map Books (2), Banners (1 box, 3 banners), Scarves (1 big box), Tumblers (5), Journals (2.5), Misc (1)</div>
+            </div>
+          </div>
+        </li>
         <li class="checklist-item">
           <input type="checkbox" onchange="updateProgress('wednesday')">
           <div class="task-content">
@@ -1395,6 +1504,136 @@ A few reminders for you:
     </div>
   </div>
 
+  <!-- Session Agenda -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">📅</span> Session agenda — April 14–17</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <!-- TUESDAY -->
+      <div class="agenda-day">
+        <div class="agenda-day-label">Tuesday, Apr 14 — Foundations · All Grafanistas</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">7:45–8:45 AM</td><td class="a-topic">Breakfast</td><td class="a-room">Lobby Lounge</td><td class="a-speaker">All Grafanistas</td></tr>
+          <tr><td class="a-time">8:15–9:00 AM</td><td class="a-topic">ID Verifications &amp; Arrivals</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Christina F. + Spencer R.</td></tr>
+          <tr><td class="a-time">9:00–9:15 AM</td><td class="a-topic">Introductions &amp; Welcome</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">All Presenters</td></tr>
+          <tr><td class="a-time">9:15–10:00 AM</td><td class="a-topic">Intro to Grafana Labs</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Matt Toback</td></tr>
+          <tr><td class="a-time">10:00–10:10 AM</td><td class="a-topic">Group Photo / Break</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">10:10–11:10 AM</td><td class="a-topic">Observability: Who, What, Why?</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">David Allen</td></tr>
+          <tr><td class="a-time">11:10–11:40 AM</td><td class="a-topic">How We Position Ourselves in the Market</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Richard Lam</td></tr>
+          <tr><td class="a-time">11:40 AM–12:30 PM</td><td class="a-topic">Lunch</td><td class="a-room">Lobby Lounge</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">12:30–1:00 PM</td><td class="a-topic">Our Customer Journey</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Dave Kranowitz</td></tr>
+          <tr><td class="a-time">1:00–2:00 PM</td><td class="a-topic">Our Ideal Customer Profile (ICP)</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Dave Kranowitz</td></tr>
+          <tr><td class="a-time">2:15–3:15 PM</td><td class="a-topic">Our Key Personas</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Richard Lam</td></tr>
+          <tr><td class="a-time">3:15–4:45 PM</td><td class="a-topic">How to Grafanista: Communication, Feedback &amp; Growth</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">TBD</td></tr>
+          <tr><td class="a-time">4:45–5:00 PM</td><td class="a-topic">Closer / Survey</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Christina F. + Spencer R.</td></tr>
+          <tr><td class="a-time">6:00–9:00 PM</td><td class="a-topic">🎉 Team Activity &amp; Dinner</td><td class="a-room">Rec Room Roundhouse</td><td class="a-speaker">All New Hires &amp; Presenters</td></tr>
+        </tbody></table>
+      </div>
+
+      <!-- WEDNESDAY -->
+      <div class="agenda-day">
+        <div class="agenda-day-label">Wednesday, Apr 15</div>
+        <div class="agenda-track-label">Foundations — All Grafanistas · Sovereign Ballroom</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">7:45–8:45 AM</td><td class="a-topic">Breakfast</td><td class="a-room">Lobby Lounge</td><td class="a-speaker">All Grafanistas</td></tr>
+          <tr><td class="a-time">9:00–11:00 AM</td><td class="a-topic">Grafana Products</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Richard Lam</td></tr>
+          <tr><td class="a-time">11:00–11:15 AM</td><td class="a-topic">Change Rooms / Break</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">R&amp;D Breakout · Hampstead</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">11:15–11:30 AM</td><td class="a-topic">R&amp;D Intro</td><td class="a-room">Hampstead</td><td class="a-speaker">All R&amp;D Presenters</td></tr>
+          <tr><td class="a-time">11:30 AM–12:30 PM</td><td class="a-topic">R&amp;D Culture</td><td class="a-room">Hampstead</td><td class="a-speaker">Ed Welch</td></tr>
+          <tr><td class="a-time">12:30–1:30 PM</td><td class="a-topic">Lunch</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">1:30–2:15 PM</td><td class="a-topic">The Product Organization</td><td class="a-room">Hampstead</td><td class="a-speaker">David Allen</td></tr>
+          <tr><td class="a-time">2:15–2:45 PM</td><td class="a-topic">People &amp; Progression</td><td class="a-room">Hampstead</td><td class="a-speaker">David Allen</td></tr>
+          <tr><td class="a-time">3:00–4:00 PM</td><td class="a-topic">Grafana &amp; Big Tent</td><td class="a-room">Hampstead</td><td class="a-speaker">Ed Welch</td></tr>
+          <tr><td class="a-time">4:00–4:30 PM</td><td class="a-topic">Actually Useful AI</td><td class="a-room">Hampstead</td><td class="a-speaker">David Allen + Ed Welch</td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">GTM Sales 101 Breakout · Sovereign Ballroom</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">11:10–12:15 PM</td><td class="a-topic">GTM Kickoff + Grafana Demo</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn S. / Colin Wood</td></tr>
+          <tr><td class="a-time">12:15–1:15 PM</td><td class="a-topic">Lunch</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">1:15–2:15 PM</td><td class="a-topic">Competitive Landscape</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Richard Lam</td></tr>
+          <tr><td class="a-time">2:15–3:00 PM</td><td class="a-topic">Sales Motions + Plays</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">—</td></tr>
+          <tr><td class="a-time">3:15–4:00 PM</td><td class="a-topic">Account Planning + PG Cadence</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Lena Bradaric</td></tr>
+          <tr><td class="a-time">4:00–5:00 PM</td><td class="a-topic">Internal Tools for Prospecting</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Ashley Joy</td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">GTM Tech 101 Breakout · Kensington</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">11:15 AM–12:15 PM</td><td class="a-topic">Grafana Demo (with GTM Sales)</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Colin Wood</td></tr>
+          <tr><td class="a-time">1:15–3:15 PM</td><td class="a-topic">Competitive Landscape + Sales Motions (with GTM Sales)</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Richard Lam / TBD</td></tr>
+          <tr><td class="a-time">3:30–5:00 PM</td><td class="a-topic">Tech Bootcamp Session</td><td class="a-room">Kensington</td><td class="a-speaker">Colin Wood</td></tr>
+        </tbody></table>
+        <div style="margin-top: 10px; padding: 8px 10px; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid var(--color-orange);">
+          <div style="font-size: 11px; color: var(--text-secondary);">🍽️ <strong style="color: var(--text-primary);">Group Dinner</strong> — Notte Ristorante (formerly Amano Trattoria) · 6:00–9:00 PM · All New Hires &amp; Presenters</div>
+        </div>
+      </div>
+
+      <!-- THURSDAY -->
+      <div class="agenda-day">
+        <div class="agenda-day-label">Thursday, Apr 16</div>
+        <div class="agenda-track-label">R&amp;D Breakout · Hampstead / Windsor A</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">9:00–9:15 AM</td><td class="a-topic">Intro &amp; Recap</td><td class="a-room">Hampstead</td><td class="a-speaker">All R&amp;D Presenters</td></tr>
+          <tr><td class="a-time">9:15–10:15 AM</td><td class="a-topic">Cloud Solutions Workshoppe</td><td class="a-room">Hampstead</td><td class="a-speaker">Richard Lam</td></tr>
+          <tr><td class="a-time">10:15–11:00 AM</td><td class="a-topic">Databases &amp; Adaptive Telemetry</td><td class="a-room">Hampstead</td><td class="a-speaker">Ed Welch</td></tr>
+          <tr><td class="a-time">11:15 AM–12:00 PM</td><td class="a-topic">Incident Response Management</td><td class="a-room">Hampstead</td><td class="a-speaker">Ed Welch</td></tr>
+          <tr><td class="a-time">12:00–12:30 PM</td><td class="a-topic">Foundations</td><td class="a-room">Hampstead</td><td class="a-speaker">David Allen</td></tr>
+          <tr><td class="a-time">12:30–1:30 PM</td><td class="a-topic">Lunch</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">1:30–2:15 PM</td><td class="a-topic">Opinionated Solutions</td><td class="a-room">Windsor A</td><td class="a-speaker">David Allen</td></tr>
+          <tr><td class="a-time">2:15–2:45 PM</td><td class="a-topic">Presenter AMA</td><td class="a-room">Hampstead</td><td class="a-speaker">All R&amp;D Presenters</td></tr>
+          <tr><td class="a-time">2:45–4:45 PM</td><td class="a-topic">Workshop: Product Setup &amp; Dashboarding</td><td class="a-room">Hampstead</td><td class="a-speaker">All R&amp;D Presenters</td></tr>
+          <tr><td class="a-time">4:45–5:00 PM</td><td class="a-topic">Closing</td><td class="a-room">Hampstead</td><td class="a-speaker">All R&amp;D Presenters</td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">GTM Sales 101 Breakout · Sovereign Ballroom</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">9:00–10:00 AM</td><td class="a-topic">External Tools for Prospecting + Workshop</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Ashley Joy</td></tr>
+          <tr><td class="a-time">10:00–11:00 AM</td><td class="a-topic">Discovery Best Practices</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">11:15 AM–12:15 PM</td><td class="a-topic">Compelling Elevator Pitch + Prep</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">12:15–1:00 PM</td><td class="a-topic">Lunch</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">1:00–1:45 PM</td><td class="a-topic">Pitch Competition</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn S. + Lena B.</td></tr>
+          <tr><td class="a-time">1:45–3:15 PM</td><td class="a-topic">MEDDPICC Part 1</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">3:30–4:30 PM</td><td class="a-topic">Winning Stage 1</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Lena Bradaric</td></tr>
+          <tr><td class="a-time">4:30–5:00 PM</td><td class="a-topic">Call Dissection</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">GTM Tech 101 Breakout · Kensington / Sovereign Ballroom</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">9:00–10:00 AM</td><td class="a-topic">Intro to MLTP</td><td class="a-room">Kensington</td><td class="a-speaker">Colin Wood</td></tr>
+          <tr><td class="a-time">10:00–11:00 AM</td><td class="a-topic">Discovery Best Practices (with GTM Sales)</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">11:15 AM–12:15 PM</td><td class="a-topic">Intro to Grafana Observability, Pt 1</td><td class="a-room">Kensington</td><td class="a-speaker">Colin Wood</td></tr>
+          <tr><td class="a-time">1:00–1:45 PM</td><td class="a-topic">Intro to Grafana Observability, Pt 2</td><td class="a-room">Kensington</td><td class="a-speaker">Colin Wood</td></tr>
+          <tr><td class="a-time">1:45–3:15 PM</td><td class="a-topic">MEDDPICC Part 1 (with GTM Sales)</td><td class="a-room">Sovereign Ballroom</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">3:30–5:00 PM</td><td class="a-topic">Bootcamp Demo: Intro, Workshop + Practice</td><td class="a-room">Kensington</td><td class="a-speaker">Colin Wood</td></tr>
+        </tbody></table>
+        <div style="margin-top: 10px; padding: 8px 10px; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid var(--color-amber);">
+          <div style="font-size: 11px; color: var(--text-secondary);">🍽️ <strong style="color: var(--text-primary);">Dinner on your own</strong> — After 5:00 PM</div>
+        </div>
+      </div>
+
+      <!-- FRIDAY -->
+      <div class="agenda-day" style="margin-bottom:0;">
+        <div class="agenda-day-label">Friday, Apr 17 — GTM Only</div>
+        <div class="agenda-track-label">GTM Sales 101 · Windsor C</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">9:00–11:00 AM</td><td class="a-topic">FMD Pitchbacks</td><td class="a-room">Windsor C</td><td class="a-speaker">Jacquelyn S. + Lena B.</td></tr>
+          <tr><td class="a-time">11:15 AM–12:15 PM</td><td class="a-topic">Winning Stage 2</td><td class="a-room">Windsor C</td><td class="a-speaker">Lena Bradaric</td></tr>
+          <tr><td class="a-time">12:15–1:00 PM</td><td class="a-topic">Lunch</td><td class="a-room">—</td><td class="a-speaker"></td></tr>
+          <tr><td class="a-time">1:00–1:45 PM</td><td class="a-topic">NBM + Pitching the Engagement Model</td><td class="a-room">Windsor C</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+          <tr><td class="a-time">1:45–2:00 PM</td><td class="a-topic">Survey + Wrap</td><td class="a-room">Windsor C</td><td class="a-speaker">Jacquelyn Scharre</td></tr>
+        </tbody></table>
+        <div class="agenda-track-label">GTM Tech 101 · Windsor A / Windsor C</div>
+        <table class="agenda-table"><tbody>
+          <tr><td class="a-time">9:00–11:00 AM</td><td class="a-topic">Pitchback: Demo &amp; SE Wrap</td><td class="a-room">Windsor A</td><td class="a-speaker">Colin Wood</td></tr>
+          <tr><td class="a-time">11:15 AM–2:00 PM</td><td class="a-topic">Winning Stage 2 + NBM + Survey &amp; Wrap (with GTM Sales)</td><td class="a-room">Windsor C</td><td class="a-speaker">Lena B. / Jacquelyn S.</td></tr>
+        </tbody></table>
+      </div>
+
+    </div>
+  </div>
+
   <!-- FAQs -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">
@@ -1465,6 +1704,40 @@ A few reminders for you:
     </div>
   </div>
 
+  <!-- Attendees -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🙋</span> April 2026 attendees</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px;">
+        <strong style="color: var(--text-primary);">Presenters: 14</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">New Hires (101): TBD</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">201 Returners: 31</strong>
+      </div>
+      <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Presenters</div>
+      <div class="attendee-grid">
+        <div class="attendee-card"><div class="attendee-name">Matt Toback</div><div class="attendee-role">VP Culture</div><span class="attendee-org ga">G&amp;A</span></div>
+        <div class="attendee-card"><div class="attendee-name">Dave Kranowitz</div><div class="attendee-role">Chief Revenue Officer</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">David Allen</div><div class="attendee-role">Sr. Director, Developer Advocacy</div><span class="attendee-org rd">R&amp;D</span></div>
+        <div class="attendee-card"><div class="attendee-name">Ed Welch</div><div class="attendee-role">Principal Engineer</div><span class="attendee-org rd">R&amp;D</span></div>
+        <div class="attendee-card"><div class="attendee-name">Richard Lam</div><div class="attendee-role">Director, Product</div><span class="attendee-org rd">R&amp;D</span></div>
+        <div class="attendee-card"><div class="attendee-name">Christina Ferrone</div><div class="attendee-role">Manager, Talent Acquisition</div><span class="attendee-org ga">G&amp;A</span></div>
+        <div class="attendee-card"><div class="attendee-name">Spencer Rose</div><div class="attendee-role">Senior Recruiter</div><span class="attendee-org ga">G&amp;A</span></div>
+        <div class="attendee-card"><div class="attendee-name">Jacquelyn Scharre</div><div class="attendee-role">Director, GTM Enablement</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">Ashley Joy</div><div class="attendee-role">User Success Representative</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">Lena Bradaric</div><div class="attendee-role">Majors Account Executive</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">Colin Dent</div><div class="attendee-role">Sr. Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">Eric Kane</div><div class="attendee-role">Regional Sales Director, Commercial</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">Maxx Reiner</div><div class="attendee-role">Regional Enterprise Sales Director</div><span class="attendee-org gtm">GTM</span></div>
+        <div class="attendee-card"><div class="attendee-name">JB Marzolf</div><div class="attendee-role">Manager, Solutions Engineering</div><span class="attendee-org gtm">GTM</span></div>
+      </div>
+      <div style="padding: 10px; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid var(--color-blue);">
+        <div style="font-size: 11px; color: var(--color-blue); font-weight: 600; margin-bottom: 3px;">New Hires &amp; 201 Returners</div>
+        <div style="font-size: 11px; color: var(--text-secondary);">101 New Hire list: TBD — see the <a href="https://docs.google.com/spreadsheets/d/1kCSWZOBzIBVxi8IUaXxXc8dQHkzKelTnVmXEpqOfvBk/edit" target="_blank" style="color: var(--text-link);">Onboarding Hub</a> for the full list as it populates. &nbsp;·&nbsp; <strong style="color: var(--text-primary);">201 Returners: 31 attendees</strong></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Quick Links -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">
@@ -1485,7 +1758,7 @@ A few reminders for you:
 
 <!-- FOOTER -->
 <div class="footer">
-  Grafana Labs — In-Person Onboarding Event Week Platform · April 2026<br>
+  Grafana Labs — In-Person Onboarding SOP · April 2026<br>
   Built for hosts, co-hosts, and presenters · Checkboxes reset on refresh
 </div>
 
