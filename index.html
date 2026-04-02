@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafana Labs — Event Week Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS RESET & TOKENS ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-orange: #FF671D;
+  --color-orange-dark: #BF4D16;
+  --color-orange-light: #FF854A;
+  --color-orange-faint: #FFF0E8;
+  --color-yellow: #FFED23;
+  --color-green: #04BC4C;
+  --color-blue: #2970FF;
+  --color-amber: #FFAB29;
+  --color-indigo: #7D64FF;
+
+  --bg-canvas: #111217;
+  --bg-primary: #181B1F;
+  --bg-secondary: #22252B;
+  --bg-surface: #292929;
+  --border-weak: #2C2F33;
+  --border-medium: #34383E;
+  --border-strong: #464C54;
+  --text-primary: #D8D9DA;
+  --text-secondary: #9FA7B3;
+  --text-disabled: #5D646F;
+  --text-emphasis: #FFFFFF;
+  --text-link: #6E9FFF;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.6);
+
+  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-base: 'Poppins', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-base);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== LAYOUT ===== */
+.app { max-width: 900px; margin: 0 auto; padding: 16px; }
+
+/* ===== GRADIENT BAR ===== */
+.gradient-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #FF671D 0%, #FFED23 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-weak);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.header-logo {
+  width: 32px; height: 32px;
+  background: var(--color-orange);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px; color: #fff;
+}
+.header-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-emphasis);
+}
+.header-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.week-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.info-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+.info-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.info-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-emphasis);
+}
+.info-value.channel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-link);
+  word-break: break-all;
+}
+
+/* ===== NAVIGATION ===== */
+.nav-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-lg);
+  padding: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-base);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  white-space: nowrap;
+}
+.nav-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+.nav-btn.active {
+  background: var(--color-orange);
+  color: #fff;
+  font-weight: 600;
+}
+.nav-btn .nav-day { display: block; font-size: 11px; font-weight: 600; }
+.nav-btn .nav-date { display: block; font-size: 10px; opacity: 0.8; margin-top: 1px; }
+.nav-btn .nav-progress {
+  display: block;
+  font-size: 9px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* ===== SECTIONS ===== */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.section-header:hover { background: var(--bg-secondary); }
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-emphasis);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .icon { font-size: 16px; }
+.section-chevron {
+  color: var(--text-secondary);
+  transition: transform 0.2s;
+  font-size: 12px;
+}
+.section.open .section-chevron { transform: rotate(180deg); }
+.section-body {
+  display: none;
+  padding: 0 16px 16px;
+}
+.section.open .section-body { display: block; }
+
+/* ===== CHECKLIST ===== */
+.checklist { list-style: none; }
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-weak);
+}
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  min-width: 18px;
+  border: 2px solid var(--border-strong);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  margin-top: 1px;
+  transition: all 0.15s;
+  position: relative;
+}
+.checklist-item input[type="checkbox"]:checked {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+}
+.checklist-item input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px; left: 2px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.checklist-item.checked .task-text { opacity: 0.5; text-decoration: line-through; }
+.task-content { flex: 1; min-width: 0; }
+.task-time {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-orange);
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.task-text {
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: opacity 0.2s;
+}
+.task-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.badge-action { color: var(--color-orange); background: rgba(255,103,29,0.12); }
+.badge-fyi { color: var(--color-blue); background: rgba(41,112,255,0.1); }
+.badge-comms { color: var(--color-green); background: rgba(4,188,76,0.1); }
+.task-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.task-note a { color: var(--text-link); text-decoration: none; }
+.task-note a:hover { text-decoration: underline; }
+.task-subitems {
+  margin-top: 6px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border-weak);
+}
+.task-subitem {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 3px 0;
+  line-height: 1.4;
+}
+
+/* ===== SLACK TEMPLATES ===== */
+.slack-template {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  overflow: hidden;
+}
+.slack-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-weak);
+}
+.slack-channel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-link);
+}
+.slack-timing {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+.slack-body {
+  padding: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.slack-body .placeholder {
+  background: rgba(255,103,29,0.15);
+  color: var(--color-orange-light);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-base);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { border-color: var(--color-orange); color: var(--color-orange); }
+.copy-btn.copied { border-color: var(--color-green); color: var(--color-green); }
+
+/* ===== QUICK REFERENCE ===== */
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+.ref-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-weak);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+.ref-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-orange);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-weak);
+  font-size: 12px;
+}
+.ref-row:last-child { border-bottom: none; }
+.ref-key { color: var(--text-secondary); }
+.ref-val { color: var(--text-emphasis); font-weight: 500; text-align: right; }
+.ref-val a { color: var(--text-link); text-decoration: none; }
+
+/* ===== ROOM GUIDE ===== */
+.room-list { list-style: none; }
+.room-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-weak);
+  font-size: 12px;
+}
+.room-item:last-child { border-bottom: none; }
+.room-name {
+  font-weight: 600;
+  color: var(--text-emphasis);
+}
+.room-use {
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+.room-floor {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--color-amber);
+  background: rgba(255,171,41,0.1);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  margin-left: 6px;
+}
+
+/* ===== FAQ ===== */
+.faq-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-weak);
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-emphasis);
+  margin-bottom: 4px;
+}
+.faq-a {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 10px;
+  color: var(--text-disabled);
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-container {
+  margin-bottom: 12px;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.progress-bar {
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--color-orange);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .app { padding: 8px; }
+  .header { padding: 16px; }
+  .header-title { font-size: 18px; }
+  .week-info { grid-template-columns: 1fr 1fr; }
+  .nav-btn { padding: 8px 4px; font-size: 11px; }
+  .ref-grid { grid-template-columns: 1fr; }
+  .section-header { padding: 12px; }
+  .section-body { padding: 0 12px 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- GRADIENT BAR -->
+<div class="gradient-bar"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-logo">G</div>
+    <div>
+      <div class="header-title">Event week platform</div>
+      <div class="header-subtitle">Host command center — Grafana Labs in-person onboarding</div>
+    </div>
+  </div>
+  <div class="week-info">
+    <div class="info-card">
+      <div class="info-label">Month</div>
+      <div class="info-value">April 2026</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Dates</div>
+      <div class="info-value">April 13 – 17</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Location</div>
+      <div class="info-value">Omni King Edward, Toronto</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Onboarding channel</div>
+      <div class="info-value channel">#inpersononboarding-2026-apr-toronto</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Presenters channel</div>
+      <div class="info-value channel">#glo-apr-2026-presenters</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">New hire channel</div>
+      <div class="info-value channel">#new-hire-2026-04-apr</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION TABS -->
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn active" onclick="switchTab('monday', this)">
+    <span class="nav-day">Monday</span>
+    <span class="nav-date">Apr 13</span>
+    <span class="nav-progress" id="nav-progress-monday">0 / 7</span>
+  </button>
+  <button class="nav-btn" onclick="switchTab('tuesday', this)">
+    <span class="nav-day">Tuesday</span>
+    <span class="nav-date">Apr 14</span>
+    <span class="nav-progress" id="nav-progress-tuesday">0 / 9</span>
+  </button>
+  <button class="nav-btn" onclick="switchTab('wednesday', this)">
+    <span class="nav-day">Wednesday</span>
+    <span class="nav-date">Apr 15</span>
+    <span class="nav-progress" id="nav-progress-wednesday">0 / 6</span>
+  </button>
+  <button class="nav-btn" onclick="switchTab('thursday', this)">
+    <span class="nav-day">Thursday</span>
+    <span class="nav-date">Apr 16</span>
+    <span class="nav-progress" id="nav-progress-thursday">0 / 5</span>
+  </button>
+  <button class="nav-btn" onclick="switchTab('friday', this)">
+    <span class="nav-day">Friday</span>
+    <span class="nav-date">Apr 17</span>
+    <span class="nav-progress" id="nav-progress-friday">0 / 6</span>
+  </button>
+  <button class="nav-btn" onclick="switchTab('reference', this)">
+    <span class="nav-day">Reference</span>
+    <span class="nav-date">Info</span>
+  </button>
+</div>
+
+<!-- ===================== MONDAY ===================== -->
+<div class="tab-content active" id="tab-monday">
+
+  <div class="progress-bar-container">
+    <div class="progress-label">
+      <span>Setup day progress</span>
+      <span id="progress-text-monday">0 / 7</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill-monday" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Room Access & Setup -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🏨</span> Room access & inventory setup</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="monday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-time">2:30 PM</span>
+            <span class="task-text">Access Vanity Fair A — bins and inventory delivered</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Contact Vanessa Gill (416-863-4124) for any hotel issues. AV/IT contact: Zia Sultani M (416-453-1395) — AV and confidence monitor will be set up Tuesday morning.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-text">Unpack inventory bins and verify contents</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-subitems">
+              <div class="task-subitem"><strong>Bin 1 (locked — code: 4124):</strong> 3 laptops (use "Onboarding Laptop" with stickers), Dymo LabelWriter Printer, Name Tags</div>
+              <div class="task-subitem"><strong>Bin 2:</strong> L&D Contest Prizes (do not open)</div>
+              <div class="task-subitem"><strong>Bin 3:</strong> GLO Water Bottles (do not open)</div>
+              <div class="task-subitem"><strong>Bin 4:</strong> Presenter Sweaters, Stickers, Lapel Pins, Lanyards, Tumblers</div>
+              <div class="task-subitem"><strong>Boxes:</strong> Culture Map Books (2), Banners (1 box, 3 banners), Scarves (1 big box), Tumblers (5), Journals (2.5), Misc (1)</div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-text">Set up new hire swag at every seat</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-subitems">
+              <div class="task-subitem">At each seat: Scarf, Tumbler, Journal/Pen, "Toronto" Sticker, Maple Leaf Grafana Swirl Sticker, Lapel Pin, Lanyard (with name tag)</div>
+              <div class="task-subitem">Culture Map Book at each seat</div>
+              <div class="task-subitem">1 pronoun sticker sheet per table</div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-text">Print name tags with Dymo LabelWriter</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Laptop: Username: Grafana Labs Onboarding / Password: GrotBot2014. Download Dymo LabelWriter software. Use White Large Multipurpose Labels (2⅛ × 2¾ in). Print: Name, Role/Dept, "Presenter" if applicable. Attach to Grafana Labs name tags and lanyards. Mix and match departments/roles/genders at seats.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-text">Set up welcome banners (3 total)</span>
+            <span class="task-badge badge-action">Action</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Monday Comms -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">💬</span> Monday Slack messages</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="monday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-time">Afternoon</span>
+            <span class="task-text">Post in presenters channel</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#glo-apr-2026-presenters</span>
+                <div>
+                  <span class="slack-timing">Monday afternoon</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="presenters-monday">Hi @here - thanks again for taking part in our in-person onboarding new hire experience and helping make the April Grafanista cohort feel welcome.
+
+Here's the latest and greatest plan: <span class="placeholder">[@ presenter names and roles — update each month]</span>
+
+You all are slated to present on Tuesday, April 14, which is our day of foundational content for all new hires. <span class="placeholder">[Lead presenter]</span> will lead our spillover session the morning of Wednesday, April 15, before we move into our breakout sessions. Our goal with these sessions is to help new Grafanistas understand who we are, where we came from, how we operate as a company, how we communicate, and more.
+
+<span class="placeholder">[Host(s): Names]</span>
+<span class="placeholder">[Event logistics: Names]</span>
+
+<span class="placeholder">[Insert Tuesday + Wednesday session schedule with presenter names and deck links]</span>
+
+Please reach out with any questions, comments, or concerns and enjoy your time in Toronto! :grafana-can:</div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('monday')">
+          <div class="task-content">
+            <span class="task-time">Afternoon</span>
+            <span class="task-text">Post Monday welcome message in onboarding channel</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">Monday afternoon</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="welcome-monday">Happy Onboarding Week, Grafanistas! :grafana-roll: <span class="placeholder">[@Host1, @Host2]</span> and myself will be your hosts this week and we look forward to meeting you all tomorrow!
+
+We've put together a few notes as you prepare for the week:
+
+*WiFi:* Free WiFi is available with your room number and last name. Please contact the front desk if you are having any issues.
+
+*Dinner* this evening is on your own and there are a lot of great places within walking distance. Feel free to ask around in this channel if you are looking for folks to eat with and check out the Onboarding Website if you need some recommendations. Wherever you go, be sure to save receipts for reimbursement.
+_Pro tip: for the meals you are on your own for this week, or any of your expenses, you can email your receipts to receipts@expensify.com and they will automatically be added as expenses in Expensify for you to reconcile later. You can forward your uber receipts, etc here - it's slick._
+
+*Breakfast:* The most important meal of the day! Breakfast will be available between 7:45am - 8:45am in *Pall Mall & Palm Court* and something you should wake up a little early for so you have time to eat.
+
+*ID verification is between 8:15am – 8:45am tomorrow morning in the Vanity Fair Foyer (2nd Level).* Check your hotel confirmation email for what document you need to bring with you and get settled before the main content starts at 9:00am.
+
+Tomorrow will be a day full of content, interaction, and learning. Bring your best self and plan to be engaged and listening throughout the day. We've flown in the experts to start you off on the right foot. As we go throughout the day, feel free to ask questions, share your insights, and participate!
+
+See you tomorrow!</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TUESDAY ===================== -->
+<div class="tab-content" id="tab-tuesday">
+
+  <div class="progress-bar-container">
+    <div class="progress-label">
+      <span>Day 1 progress</span>
+      <span id="progress-text-tuesday">0 / 9</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill-tuesday" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Tuesday Morning Setup -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌅</span> Morning setup & comms</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="tuesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-text">Set up confidence monitor and slide decks</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">AV/IT from hotel will support. Provide a clicker to advance slides. Do a final QA check on all slide decks.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-text">Set up ID verification station</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Set up table in Vanity Fair Foyer for 8:15–8:45am. Use RTW Docs sheet to verify each person's ID. Check: document type, picture, name, and expiration date.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-time">6:30 AM</span>
+            <span class="task-text">Send breakfast / morning comms</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="task-note">Schedule send for 6:30am.</div>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">Schedule for 6:30 AM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="tuesday-morning">Good morning, Grafanistas! :onboard: We will see you soon in *Vanity Fair A* (located on the 2nd Level)! Name tags are spread around at each chair, make sure to find your assigned seat!
+
+• *7:45am - 8:45am:* Breakfast will be available in the *Palm Mall & Palm Court* rooms (2nd Level).
+• *8:15am - 8:45am:* ID Verification checks will be at the table in the Vanity Fair Foyer (2nd Level).
+• *8:45am - 9:00am:* Please use this time to meet and connect with your fellow Grafanistas. Share where you traveled from, your role, and something that brings you joy. :upside_down_face:
+
+Content starts promptly at *9:00am*.
+
+Here is a look at today's agenda for a quick reference throughout the day: <span class="placeholder">[attach agenda image]</span></div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-time">8:15 – 8:45 AM</span>
+            <span class="task-text">Run ID verification station</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Vanity Fair Foyer, 2nd Level.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tuesday Mid-Morning -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">📸</span> Mid-morning tasks</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="tuesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-time">10:00 AM break</span>
+            <span class="task-text">Take group photo</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Get everyone together before they disperse for the break.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-time">~10:30 AM</span>
+            <span class="task-text">Post lunch comms</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">Around 10:30 AM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="tuesday-lunch">Hello Grafanistas! We hope you've enjoyed the morning! Lunch is just around the corner.
+
+:mantelpiece_clock: *Time:* Lunch will be available for us from 11:40am - 12:30pm
+:green_salad: *Location:* Lunch will be served in the same place as breakfast and we'll get to use the tables in the adjacent room and the beautiful open foyer for eating together. Please sit next to someone you haven't met yet!
+:fork_and_knife: *Dietary Info:* The only meals that are made individually is if it is a vegan meal; please let me know if you are. The menu has already been adjusted to accommodate GF, vegetarians, and halal (chicken).</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tuesday Afternoon/Evening -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌆</span> Afternoon & evening</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="tuesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-time">5:00 PM</span>
+            <span class="task-text">Post dinner / activity comms and Day 1 survey reminder</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">5:00 PM — when sessions end</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="tuesday-dinner">@here *Thank you all for a great first day!* :minion_wave:
+
+We have arranged dinner and an opportunity for connection for all of you! Please join us at <span class="placeholder">[Venue Name]</span> (<span class="placeholder">[Address]</span>) at *6:00pm* for dinner, drinks, fun and games! It's about a <span class="placeholder">[X]</span>-min walk from the hotel or you can Uber _in groups_. Please do not take an Uber by yourself. Everyone will get 3 drink tickets each so be sure to *bring a valid ID with you*. :beers:
+:point_right: *Meet up in the lobby at 5:30pm to head over with <span class="placeholder">[@escort name]</span>!*
+• Bring your name tag tonight!
+• If for some reason, you miss leaving with the group, you can map it on your phone using the address above.
+
+:fish-smirk: Don't forget that dinner is a great time to ask the "What's your salmon?" question!
+
+:tangelo-check: Additionally, please remember to fill out the *"Day 1: Foundations Survey"* in Tangelo if you were unable to do it at the closing of today's sessions. We really appreciate any and all feedback as we are constantly trying to improve the program for us all. :speech_balloon:</div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('tuesday')">
+          <div class="task-content">
+            <span class="task-text">Attend dinner / activity event</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Arrive 15-20 mins early. Staff will give you drink tickets to hand out (3 per person). Assign someone to stay behind for stragglers.</div>
+          </div>
+        </li>
+      </ul>
+      <div style="margin-top: 12px; padding: 10px; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid var(--color-blue);">
+        <div style="font-size: 11px; color: var(--color-blue); font-weight: 600; margin-bottom: 4px;">FYI — Food & beverage</div>
+        <div style="font-size: 11px; color: var(--text-secondary);">Coffee/tea/water/sodas and snacks available in Vanity Fair Foyer from the morning. Hotel staff should replenish — follow up if they don't. Vegan meals are made individually; all other dietary needs (GF, vegetarian, halal) are built into the menu.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== WEDNESDAY ===================== -->
+<div class="tab-content" id="tab-wednesday">
+
+  <div class="progress-bar-container">
+    <div class="progress-label">
+      <span>Day 2 progress</span>
+      <span id="progress-text-wednesday">0 / 6</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill-wednesday" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Wednesday Morning -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌅</span> Morning comms & setup</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="wednesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-time">6:00 – 6:15 AM</span>
+            <span class="task-text">Post morning comms with Day 2 schedule</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">6:00 – 6:15 AM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="wednesday-morning">:grafana-can: Good morning, Grafanistas! We hope you enjoyed <span class="placeholder">[last night's activity]</span> and getting to know your fellow Grafanistas. If you have photos from day 1, please feel free to post them here!
+
+:apple: Breakfast will be available in the Palm Mall & Palm Court rooms from 7:45am - 8:45am. Lunch menus will be posted in the "Lunch Menus" canvas at the top of this channel when they are available.
+:learning_: Content will begin promptly at 9:00am with all of us in Vanity Fair A for the first session.
+:spiral_calendar_pad: Reminder: Agendas can be found on the Onboarding Website. Please take a look at the roles for each breakout to determine where you should be. Feel free to reach out to <span class="placeholder">[@Host1 or @Host2]</span> if you have any questions and we can point you in the right direction!
+
+*Don't forget your name tags / lanyards today!*
+
+Here's a look at Day 2 for you: <span class="placeholder">[attach agenda image]</span></div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-text">Ensure presenters set up monitors/presentations</span>
+            <span class="task-badge badge-fyi">FYI</span>
+            <div class="task-note">Presenters handle their own AV setup. Be available if they need help.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Wednesday Mid-Morning -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🍽️</span> Mid-morning tasks</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="wednesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-time">~10:30 AM</span>
+            <span class="task-text">Post lunch menu in the Lunch Menus canvas</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Post in the canvas at the top of the onboarding channel.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-time">~12:00 PM</span>
+            <span class="task-text">Post biometric MFA pro tip</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">Around noon (during lunch)</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="wednesday-bio">:point_right: *PRO TIP: Setup biometric option for multi-factor authentication. Save time! :stopwatch:*
+
+Save time with your multi-factor authentication by setting up biometrics (fingerprint) using this article:
+
+https://grafana.freshservice.com/support/solutions/articles/19000099204</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Wednesday Afternoon -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌆</span> Afternoon & evening</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="wednesday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('wednesday')">
+          <div class="task-content">
+            <span class="task-time">4:50 PM</span>
+            <span class="task-text">Post dinner info and Day 2 survey reminder</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">4:50 PM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="wednesday-dinner">@here *I hope everyone is enjoying Onboarding!* :onboard: Please join us at <span class="placeholder">[Restaurant Name]</span> (<span class="placeholder">[Address]</span>) at 6:00pm for dinner! This dinner has been pre-paid so your attendance is required. It's about a <span class="placeholder">[X]</span>-min walk from the hotel. Meet <span class="placeholder">[@escort name]</span> in the lobby at 5:50pm to walk over as a group.
+
+:tangelo-check: Additionally, if you participated in the *R&D Breakout, please fill out the "R&D Breakout 1" Survey in Tangelo*. If you participated in the *GTM Breakout*, please fill out the *"GTM 101 Survey" in Tangelo* and continue to fill out the same survey throughout the week.
+
+(_Note:_ Everyone will be assigned both surveys, select *Not Applicable (N/A)* on whichever breakout survey you did not attend.)</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== THURSDAY ===================== -->
+<div class="tab-content" id="tab-thursday">
+
+  <div class="progress-bar-container">
+    <div class="progress-label">
+      <span>Day 3 progress</span>
+      <span id="progress-text-thursday">0 / 5</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill-thursday" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Thursday Morning -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌅</span> Morning comms</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="thursday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('thursday')">
+          <div class="task-content">
+            <span class="task-time">~6:15 AM</span>
+            <span class="task-text">Post morning comms with Day 3 schedule</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">~6:15 AM or schedule ahead</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="thursday-morning">:city_sunrise: Good morning!
+
+Today is the last day for G&A + R&D! :sob: We encourage you to continue to get to know your fellow Grafanistas and find out what their salmon is on coffee breaks or at lunch today!
+
+:croissant: Breakfast will be available 7:45-8:45am in the Palm Mall & Palm Court rooms.
+:coffee: Coffee/tea/water/soft drinks and snacks will continue to be in the same corridor and replenished throughout the day.
+:spiral_calendar_pad: Reminder: Agendas can be found on the onboarding website.
+
+<span class="placeholder">[attach agenda image]</span></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Thursday Mid-Morning -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">💰</span> Mid-morning — Expensify codes</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="thursday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('thursday')">
+          <div class="task-content">
+            <span class="task-time">~10:30 AM</span>
+            <span class="task-text">Post Expensify event codes reminder</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">~10:30 AM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="thursday-expensify">:loudspeaker: New Event Codes for Onboarding (Expensify)
+
+Finance is rolling out Event Codes to help track spend across company events.
+
+Going forward, each month's onboarding will have two codes:
+
+:large_green_circle: *101 Onboarding (New Hires)*
+• Project: 10005: Onboarding
+• Description: Onboarding <span class="placeholder">[Month Year]</span> – [your description]
+
+:large_blue_circle: *201 Onboarding (GTM Returners)*
+• Project: 10023: GTM Onboarding
+• Description: GTM 201 <span class="placeholder">[Month Year]</span> – [your description]
+
+:white_check_mark: *What you need to do:*
+Please use the correct Event Code in Expensify when submitting expenses. Refer to the images below for visuals!
+
+These codes and instructions are pinned in the Bookmarks at the top of this channel. Please reach out if you have any questions. :thank-you:</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Thursday Afternoon -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌆</span> Afternoon — dinner on your own</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="thursday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('thursday')">
+          <div class="task-content">
+            <span class="task-time">~2:15 PM</span>
+            <span class="task-text">Post dinner-on-own comms</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">~2:15 / 2:30 PM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="thursday-dinner">Dinner tonight is on your own! We encourage you to find some Grafanistas you haven't spent enough time with yet and build those relationships together over dinner. G&A + R&D are done after today so today is your last opportunity, GTM, to build those cross-functional relationships with them!
+
+If one person pays for dinner, please make sure you remember to get the itemized receipt and include the other individuals who joined you in your Expensify reimbursement request (there is a spot for you to add them).
+
+Please refer to the Onboarding website for some dinner spot recommendations!</div>
+            </div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('thursday')">
+          <div class="task-content">
+            <span class="task-text">Remind folks to complete Tangelo surveys</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="task-note">Include survey reminder with the dinner comms or as a separate message. Mention: "It was an absolute pleasure hosting you all this week!"</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FRIDAY ===================== -->
+<div class="tab-content" id="tab-friday">
+
+  <div class="progress-bar-container">
+    <div class="progress-label">
+      <span>Wrap-up day progress</span>
+      <span id="progress-text-friday">0 / 6</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill-friday" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Friday Morning -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🌅</span> Morning comms</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="friday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('friday')">
+          <div class="task-content">
+            <span class="task-time">6:00 – 6:15 AM</span>
+            <span class="task-text">Post Friday morning comms</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">6:00 – 6:15 AM</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="friday-morning">Hello Grafanistas! For folks in R&D and G&A, we wish you safe travels home. For those of you in GTM - you're in the home stretch!
+
+• *Breakfast:* The most important meal of the day! Breakfast will be available between 7:45am - 8:45am in the *Palm Mall & Palm Court* rooms and something you should wake up a little early for so you have time to eat.
+• The day will start with pitchbacks in your respective locations. For questions about those, contact <span class="placeholder">[@pitchback coordinator]</span>.
+• We'll come together as a group in *Belgravia* at 11:15am.
+• *Lunch:* This will be available in the *Palm Mall & Palm Court* rooms from *12:15pm - 1:00pm.*
+
+<span class="placeholder">[attach agenda image]</span></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Friday Mid-Day -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">📋</span> Resources & next steps</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="friday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('friday')">
+          <div class="task-content">
+            <span class="task-time">Lunch time</span>
+            <span class="task-text">Post Resources & Next Steps message</span>
+            <span class="task-badge badge-comms">Comms</span>
+            <div class="slack-template">
+              <div class="slack-header">
+                <span class="slack-channel">#inpersononboarding-2026-apr-toronto</span>
+                <div>
+                  <span class="slack-timing">Around lunch</span>
+                  <button class="copy-btn" onclick="copySlack(this)">📋 Copy</button>
+                </div>
+              </div>
+              <div class="slack-body" data-template="friday-resources">:onboard: *Resources & Next Steps* :black_right_pointing_double_triangle_with_vertical_bar:
+
+Thank you all for a great in-person onboarding week! We hope you found this week to be valuable and engaging. As you continue to onboard at Grafana Labs, be sure to build relationships intentionally with your cohort and your fellow coworkers.
+
+A few reminders for you:
+
+• *Overall Feedback* - Please provide feedback on your in-person onboarding experience through the "Post-In-Person Onboarding Event Survey" in Tangelo.
+• *Culture Map by Erin Meyers book* - In roughly three months, your cohort will continue the onboarding adventure and meet virtually to discuss this book, so please finish reading it by then.
+• *Expensify Codes* - Please make sure you are using the correct codes when submitting your expenses on Expensify. As a reminder, they are listed in the Canvas at the top of this thread with step by step instructions.</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Friday Takedown -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">📦</span> Full takedown</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-day="friday">
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('friday')">
+          <div class="task-content">
+            <span class="task-text">Pack up equipment into bins</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Pack remaining speakers, cords, remote controls, clickers, laptops into bins. Double-loop the locks on each side. Lock code: 4124.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('friday')">
+          <div class="task-content">
+            <span class="task-text">Take down banners and pack into boxes</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Put banners into banner containers, then back into cardboard boxes. Place next to bins for storage pickup.</div>
+          </div>
+        </li>
+        <li class="checklist-item">
+          <input type="checkbox" onchange="updateProgress('friday')">
+          <div class="task-content">
+            <span class="task-text">Call Banquets Manager for storage pickup</span>
+            <span class="task-badge badge-action">Action</span>
+            <div class="task-note">Call or text 416-903-1427, or dial 0 from the meeting room and ask for the Banquets Manager on duty. Let them know items need to go back to storage and where they are located. Place confidence monitors next to bins/boxes.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== REFERENCE ===================== -->
+<div class="tab-content" id="tab-reference">
+
+  <!-- On-Site Contacts -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">📞</span> On-site contacts</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="ref-grid">
+        <div class="ref-card">
+          <div class="ref-card-title">Hotel</div>
+          <div class="ref-row"><span class="ref-key">Contact</span><span class="ref-val">Vanessa Gill</span></div>
+          <div class="ref-row"><span class="ref-key">Phone</span><span class="ref-val"><a href="tel:4168634124">416-863-4124</a></span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">AV / IT (Hotel)</div>
+          <div class="ref-row"><span class="ref-key">Contact</span><span class="ref-val">Zia Sultani M</span></div>
+          <div class="ref-row"><span class="ref-key">Phone</span><span class="ref-val"><a href="tel:4164531395">416-453-1395</a></span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Banquets Manager</div>
+          <div class="ref-row"><span class="ref-key">Phone</span><span class="ref-val"><a href="tel:4169031427">416-903-1427</a></span></div>
+          <div class="ref-row"><span class="ref-key">Email</span><span class="ref-val"><a href="mailto:Banquets@omnihotels.com">Banquets@omnihotels.com</a></span></div>
+          <div class="ref-row"><span class="ref-key">In-room</span><span class="ref-val">Dial 0</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">AV / Tech (Pinnacle)</div>
+          <div class="ref-row"><span class="ref-key">Phone</span><span class="ref-val"><a href="tel:4374337005">437-433-7005</a></span></div>
+          <div class="ref-row"><span class="ref-key">Email</span><span class="ref-val"><a href="mailto:1019@pinnaclelive.com">1019@pinnaclelive.com</a></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WiFi & Credentials -->
+  <div class="section open">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🔑</span> WiFi & credentials</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="ref-grid">
+        <div class="ref-card">
+          <div class="ref-card-title">WiFi</div>
+          <div class="ref-row"><span class="ref-key">SSID</span><span class="ref-val">Grafana Labs <em>or</em> Omni Meeting</span></div>
+          <div class="ref-row"><span class="ref-key">Password</span><span class="ref-val">Grafana2026</span></div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 6px;">Works for all conference rooms on 2nd floor and 11th floor.</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Onboarding laptop</div>
+          <div class="ref-row"><span class="ref-key">Username</span><span class="ref-val">Grafana Labs Onboarding</span></div>
+          <div class="ref-row"><span class="ref-key">Password</span><span class="ref-val">GrotBot2014</span></div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Bin lock code</div>
+          <div class="ref-row"><span class="ref-key">Code</span><span class="ref-val" style="font-size: 20px; color: var(--color-orange);">4124</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Room Guide -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🗺️</span> Room guide — Omni King Edward</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <ul class="room-list">
+        <li class="room-item">
+          <span class="room-name">Vanity Fair A</span>
+          <span class="room-use">— Main session room</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Vanity Fair Foyer</span>
+          <span class="room-use">— ID verification, coffee/snacks</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Palm Mall & Palm Court</span>
+          <span class="room-use">— Breakfast & lunch</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Belgravia</span>
+          <span class="room-use">— Friday group wrap-up</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Knightsbridge / Kensington / Hyde Park</span>
+          <span class="room-use">— Breakout sessions</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Westminster Boardroom</span>
+          <span class="room-use">— Breakout sessions</span>
+          <span class="room-floor">2nd floor</span>
+        </li>
+        <li class="room-item">
+          <span class="room-name">Oxford & Cambridge Rooms</span>
+          <span class="room-use">— Breakout sessions (Private Residences Lounge — need key card from Jacquelyn Scharre at check-in)</span>
+          <span class="room-floor">11th floor</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FAQs -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">❓</span> Onboarding FAQs</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="faq-item">
+        <div class="faq-q">Someone wants to change their flight. What should I do?</div>
+        <div class="faq-a">Reach out to Val. She can check what their flight currently costs, if there's money left in their travel budget, if they can change their flight at all, and if it will be at the responsibility of the new hire financially.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if there is a room change for sessions?</div>
+        <div class="faq-a">Send out comms in the Slack channel with the new room. Don't worry about updating the website — just keep the Slack updated.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do GTM new hires need their laptops for Days 2 and 3?</div>
+        <div class="faq-a">Not 100% necessary, but a nice to have.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does 201 join us for dinner and activity?</div>
+        <div class="faq-a">Yes, group dinner/activities are inclusive of all Grafanistas in attendance.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How can I reach the Banquets Manager at the Omni?</div>
+        <div class="faq-a">Call or text 416-903-1427, email Banquets@omnihotels.com, or dial 0 from a phone in the room and ask for the Banquets Manager on duty.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How to reach AV/Tech Support via Pinnacle?</div>
+        <div class="faq-a">Call or text 437-433-7005, or email 1019@pinnaclelive.com.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What are the onboarding laptop credentials?</div>
+        <div class="faq-a">Username: Grafana Labs Onboarding / Password: GrotBot2014</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Contacts (Internal) -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">👥</span> Internal contacts & roles</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="ref-grid">
+        <div class="ref-card">
+          <div class="ref-card-title">Anything & everything</div>
+          <div class="ref-row"><span class="ref-val">Val Carabello</span></div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">Just ask and I'll handle it or point you in the right direction.</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">Hotel & evening events</div>
+          <div class="ref-row"><span class="ref-val">Juan Ruszem</span></div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">Rooms, session meeting rooms, breakfast/lunch, dinners and activities.</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">R&D content</div>
+          <div class="ref-row"><span class="ref-val"><span class="placeholder">[R&D lead names]</span></span></div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">R&D attendees and content questions.</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-card-title">GTM content</div>
+          <div class="ref-row"><span class="ref-val"><span class="placeholder">[GTM lead names]</span></span></div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">GTM 101 and 201 attendees and content questions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-title"><span class="icon">🔗</span> Quick links</div>
+      <span class="section-chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="ref-card" style="margin-bottom: 0;">
+        <div class="ref-row"><span class="ref-key">Event website</span><span class="ref-val"><a href="https://sites.google.com/grafana.com/grafanaonboarding/home" target="_blank">Onboarding Website</a></span></div>
+        <div class="ref-row"><span class="ref-key">Onboarding SOP</span><span class="ref-val"><a href="https://docs.google.com/document/d/1mQV98ENPjr7IBV6l7j0S1DAzvQL9ddfI0CiEetRhSFA/edit" target="_blank">Google Doc</a></span></div>
+        <div class="ref-row"><span class="ref-key">Onboarding Hub</span><span class="ref-val"><a href="https://docs.google.com/spreadsheets/d/1kCSWZOBzIBVxi8IUaXxXc8dQHkzKelTnVmXEpqOfvBk/edit" target="_blank">Google Sheet</a></span></div>
+        <div class="ref-row"><span class="ref-key">Presentations</span><span class="ref-val"><a href="https://drive.google.com/drive/folders/1LrluUcMNAAD79rsQC8V-HhRgUMjj399m" target="_blank">Google Drive</a></span></div>
+        <div class="ref-row"><span class="ref-key">In-person Drive folder</span><span class="ref-val"><a href="https://drive.google.com/drive/folders/1cF8xkOy_GHs9aIZeQShDsWhAixZ1Xr1p" target="_blank">Google Drive</a></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Grafana Labs — In-Person Onboarding Event Week Platform · April 2026<br>
+  Built for hosts, co-hosts, and presenters · Checkboxes reset on refresh
+</div>
+
+</div><!-- /app -->
+
+<script>
+// Tab switching
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Section toggle
+function toggleSection(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// Progress tracking
+function updateProgress(day) {
+  const tab = document.getElementById('tab-' + day);
+  const checkboxes = tab.querySelectorAll('input[type="checkbox"]');
+  const checked = tab.querySelectorAll('input[type="checkbox"]:checked').length;
+  const total = checkboxes.length;
+  const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+  // Update progress bar
+  const fill = document.getElementById('progress-fill-' + day);
+  const text = document.getElementById('progress-text-' + day);
+  if (fill) fill.style.width = pct + '%';
+  if (text) text.textContent = checked + ' / ' + total;
+
+  // Update nav progress
+  const navProgress = document.getElementById('nav-progress-' + day);
+  if (navProgress) navProgress.textContent = checked + ' / ' + total;
+
+  // Toggle strikethrough
+  checkboxes.forEach(cb => {
+    const item = cb.closest('.checklist-item');
+    if (cb.checked) item.classList.add('checked');
+    else item.classList.remove('checked');
+  });
+
+  // Green progress bar when complete
+  if (fill && pct === 100) fill.style.background = '#04BC4C';
+  else if (fill) fill.style.background = '#FF671D';
+}
+
+// Copy Slack template
+function copySlack(btn) {
+  const template = btn.closest('.slack-template');
+  const body = template.querySelector('.slack-body');
+  // Get text content, replacing placeholder spans with bracket text
+  let text = '';
+  body.childNodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      text += node.textContent;
+    } else if (node.classList && node.classList.contains('placeholder')) {
+      text += node.textContent;
+    } else {
+      text += node.textContent || '';
+    }
+  });
+  text = text.trim();
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '✓ Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 Copy';
+    }, 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    btn.innerHTML = '✓ Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 Copy';
+    }, 2000);
+  });
+}
+
+// Initialize progress counts on load
+document.addEventListener('DOMContentLoaded', () => {
+  ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].forEach(day => {
+    updateProgress(day);
+  });
+});
+</script>
+
+</body>
+</html>
