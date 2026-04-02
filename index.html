@@ -646,6 +646,10 @@ body {
     <span class="nav-day">Reference</span>
     <span class="nav-date">Info</span>
   </button>
+  <button class="nav-btn" onclick="switchTab('attendees', this)">
+    <span class="nav-day">Attendees</span>
+    <span class="nav-date">April</span>
+  </button>
 </div>
 
 <!-- ===================== MONDAY ===================== -->
@@ -1704,40 +1708,6 @@ A few reminders for you:
     </div>
   </div>
 
-  <!-- Attendees -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <div class="section-title"><span class="icon">🙋</span> April 2026 attendees</div>
-      <span class="section-chevron">▼</span>
-    </div>
-    <div class="section-body">
-      <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px;">
-        <strong style="color: var(--text-primary);">Presenters: 14</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">New Hires (101): TBD</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">201 Returners: 31</strong>
-      </div>
-      <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Presenters</div>
-      <div class="attendee-grid">
-        <div class="attendee-card"><div class="attendee-name">Matt Toback</div><div class="attendee-role">VP Culture</div><span class="attendee-org ga">G&amp;A</span></div>
-        <div class="attendee-card"><div class="attendee-name">Dave Kranowitz</div><div class="attendee-role">Chief Revenue Officer</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">David Allen</div><div class="attendee-role">Sr. Director, Developer Advocacy</div><span class="attendee-org rd">R&amp;D</span></div>
-        <div class="attendee-card"><div class="attendee-name">Ed Welch</div><div class="attendee-role">Principal Engineer</div><span class="attendee-org rd">R&amp;D</span></div>
-        <div class="attendee-card"><div class="attendee-name">Richard Lam</div><div class="attendee-role">Director, Product</div><span class="attendee-org rd">R&amp;D</span></div>
-        <div class="attendee-card"><div class="attendee-name">Christina Ferrone</div><div class="attendee-role">Manager, Talent Acquisition</div><span class="attendee-org ga">G&amp;A</span></div>
-        <div class="attendee-card"><div class="attendee-name">Spencer Rose</div><div class="attendee-role">Senior Recruiter</div><span class="attendee-org ga">G&amp;A</span></div>
-        <div class="attendee-card"><div class="attendee-name">Jacquelyn Scharre</div><div class="attendee-role">Director, GTM Enablement</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">Ashley Joy</div><div class="attendee-role">User Success Representative</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">Lena Bradaric</div><div class="attendee-role">Majors Account Executive</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">Colin Dent</div><div class="attendee-role">Sr. Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">Eric Kane</div><div class="attendee-role">Regional Sales Director, Commercial</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">Maxx Reiner</div><div class="attendee-role">Regional Enterprise Sales Director</div><span class="attendee-org gtm">GTM</span></div>
-        <div class="attendee-card"><div class="attendee-name">JB Marzolf</div><div class="attendee-role">Manager, Solutions Engineering</div><span class="attendee-org gtm">GTM</span></div>
-      </div>
-      <div style="padding: 10px; background: var(--bg-secondary); border-radius: var(--radius-md); border-left: 3px solid var(--color-blue);">
-        <div style="font-size: 11px; color: var(--color-blue); font-weight: 600; margin-bottom: 3px;">New Hires &amp; 201 Returners</div>
-        <div style="font-size: 11px; color: var(--text-secondary);">101 New Hire list: TBD — see the <a href="https://docs.google.com/spreadsheets/d/1kCSWZOBzIBVxi8IUaXxXc8dQHkzKelTnVmXEpqOfvBk/edit" target="_blank" style="color: var(--text-link);">Onboarding Hub</a> for the full list as it populates. &nbsp;·&nbsp; <strong style="color: var(--text-primary);">201 Returners: 31 attendees</strong></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Quick Links -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">
@@ -1753,6 +1723,75 @@ A few reminders for you:
         <div class="ref-row"><span class="ref-key">In-person Drive folder</span><span class="ref-val"><a href="https://drive.google.com/drive/folders/1cF8xkOy_GHs9aIZeQShDsWhAixZ1Xr1p" target="_blank">Google Drive</a></span></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ===================== ATTENDEES ===================== -->
+<div class="tab-content" id="tab-attendees">
+  <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 16px;">
+    <strong style="color: var(--text-primary);">Presenters: 14</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">New Hires (101): TBD</strong> &nbsp;·&nbsp; <strong style="color: var(--text-primary);">201 Returners: 31</strong>
+  </div>
+
+  <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Presenters</div>
+  <div class="attendee-grid">
+    <div class="attendee-card"><div class="attendee-name">Matt Toback</div><div class="attendee-role">VP Culture</div><span class="attendee-org ga">G&amp;A</span></div>
+    <div class="attendee-card"><div class="attendee-name">Dave Kranowitz</div><div class="attendee-role">Chief Revenue Officer</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">David Allen</div><div class="attendee-role">Sr. Director, Developer Advocacy</div><span class="attendee-org rd">R&amp;D</span></div>
+    <div class="attendee-card"><div class="attendee-name">Ed Welch</div><div class="attendee-role">Principal Engineer</div><span class="attendee-org rd">R&amp;D</span></div>
+    <div class="attendee-card"><div class="attendee-name">Richard Lam</div><div class="attendee-role">Director, Product</div><span class="attendee-org rd">R&amp;D</span></div>
+    <div class="attendee-card"><div class="attendee-name">Christina Ferrone</div><div class="attendee-role">Manager, Talent Acquisition</div><span class="attendee-org ga">G&amp;A</span></div>
+    <div class="attendee-card"><div class="attendee-name">Spencer Rose</div><div class="attendee-role">Senior Recruiter</div><span class="attendee-org ga">G&amp;A</span></div>
+    <div class="attendee-card"><div class="attendee-name">Jacquelyn Scharre</div><div class="attendee-role">Director, GTM Enablement</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Ashley Joy</div><div class="attendee-role">User Success Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Lena Bradaric</div><div class="attendee-role">Majors Account Executive</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Colin Dent</div><div class="attendee-role">Sr. Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Eric Kane</div><div class="attendee-role">Regional Sales Director, Commercial</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Maxx Reiner</div><div class="attendee-role">Regional Enterprise Sales Director</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">JB Marzolf</div><div class="attendee-role">Manager, Solutions Engineering</div><span class="attendee-org gtm">GTM</span></div>
+  </div>
+
+  <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 20px; margin-bottom: 8px;">New Hire 101</div>
+  <div class="attendee-grid">
+    <div class="attendee-card" style="border-style: dashed; border-color: var(--border-medium);">
+      <div class="attendee-name" style="color: var(--text-secondary);">New Hires TBD</div>
+      <div class="attendee-role">See <a href="https://docs.google.com/spreadsheets/d/1kCSWZOBzIBVxi8IUaXxXc8dQHkzKelTnVmXEpqOfvBk/edit" target="_blank" style="color: var(--text-link);">Onboarding Hub</a> as list populates</div>
+      <span class="attendee-org">101</span>
+    </div>
+  </div>
+
+  <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 20px; margin-bottom: 8px;">201 Returners</div>
+  <div class="attendee-grid">
+    <div class="attendee-card"><div class="attendee-name">Angelique Joly-Lawrence</div><div class="attendee-role">Account Director</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Bryan Martinez</div><div class="attendee-role">Senior Solutions Engineer</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Cameron Cullen</div><div class="attendee-role">Senior Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Case Videler</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Chris Rihm</div><div class="attendee-role">Senior Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Claudia Wong</div><div class="attendee-role">Senior Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Cody Umentum</div><div class="attendee-role">Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Colin Dent</div><div class="attendee-role">Senior Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Dan Finnegan</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Dave Loaiza</div><div class="attendee-role">Manager, Observability Architecture</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Grant Hornung</div><div class="attendee-role">Regional Sales Director, Majors</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Harvey Dodman-Edwards</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Ian Healy</div><div class="attendee-role">Associate Observability Architect</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Jason Powell</div><div class="attendee-role">Account Director, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Kaleb Branscomb</div><div class="attendee-role">Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Katrina Parsons</div><div class="attendee-role">Strategic Account Executive, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Lindsay deMuth</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Marv Eghan</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Matt Cox</div><div class="attendee-role">Senior Enterprise AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Max Westerman</div><div class="attendee-role">Senior Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Max Klotter</div><div class="attendee-role">Senior Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Mazen Lawand</div><div class="attendee-role">Senior Observability Architect</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Melissa Blackmore</div><div class="attendee-role">Senior Enterprise AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Pascal Bouche</div><div class="attendee-role">Regional Sales Director, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Rhyss Limguangco</div><div class="attendee-role">Senior Commercial AE, Growth</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Ruth Wootton</div><div class="attendee-role">Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Sean Daffan</div><div class="attendee-role">Sales Development Representative</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Sergio Sicre</div><div class="attendee-role">Senior Enterprise AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Shane Ahern</div><div class="attendee-role">Solutions Engineer</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Timo Herweg</div><div class="attendee-role">Observability Architect</div><span class="attendee-org gtm">GTM</span></div>
+    <div class="attendee-card"><div class="attendee-name">Utku Kalkan</div><div class="attendee-role">Senior Commercial AE, Acquisition</div><span class="attendee-org gtm">GTM</span></div>
   </div>
 </div>
 
