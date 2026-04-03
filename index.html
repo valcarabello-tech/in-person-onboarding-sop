@@ -567,8 +567,85 @@ body {
   .section-body { padding: 0 12px 12px; }
 }
 </style>
+
+/* ===== AUTH GATE ===== */
+#auth-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #111217;
+  display: flex; align-items: center; justify-content: center;
+}
+#auth-box {
+  background: #181B1F;
+  border: 1px solid #34383E;
+  border-radius: 12px;
+  padding: 40px 48px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+#auth-box .logo-row {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-bottom: 24px;
+}
+#auth-box .logo-bar {
+  width: 32px; height: 4px;
+  background: linear-gradient(90deg, #FF671D 0%, #FFED23 100%);
+  border-radius: 2px;
+}
+#auth-box h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px; font-weight: 600;
+  color: #FFFFFF; margin-bottom: 6px;
+}
+#auth-box p {
+  font-size: 12px; color: #9FA7B3;
+  margin-bottom: 28px; line-height: 1.5;
+}
+#auth-error {
+  display: none;
+  font-size: 12px; color: #FF5151;
+  margin-top: 14px; line-height: 1.4;
+}
+</style>
 </head>
 <body>
+
+<!-- ===== AUTH GATE ===== -->
+<div id="auth-gate">
+  <div id="auth-box">
+    <div class="logo-row"><div class="logo-bar"></div></div>
+    <h1>In-Person Onboarding SOP</h1>
+    <p>Sign in with your Grafana Labs Google account to continue.</p>
+    <div id="g_id_onload"
+      data-client_id="97959952517-93e1i3auj3goqumfbi3krhn99k7u9d81.apps.googleusercontent.com"
+      data-callback="handleSignIn"
+      data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="filled_black"
+      data-text="signin_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+    </div>
+    <div id="auth-error">Access denied. Please sign in with a <strong>@grafana.com</strong> Google account.</div>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+function handleSignIn(response) {
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  const email = payload.email || '';
+  if (email.endsWith('@grafana.com')) {
+    document.getElementById('auth-gate').style.display = 'none';
+  } else {
+    document.getElementById('auth-error').style.display = 'block';
+  }
+}
+</script>
 
 <div class="app">
 
